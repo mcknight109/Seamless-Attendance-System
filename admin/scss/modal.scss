@@ -1,0 +1,230 @@
+.add-account-modal{
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Black background with opacity */
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-in-out; /* Animation when modal appears */
+    .modal-content {
+        background-color: #ffffff;
+        border-radius: 8px;
+        width: 700px;
+        height: 650px;
+        display: flex;
+        align-items: center;
+        animation: slideIn 0.3s ease-in-out;
+        overflow: hidden;
+        .modal-body{
+            display: flex;
+            height: 100%;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            .section1{
+                padding: 10px;
+                height: 100%;
+                width: 50%;
+                .profile-img{
+                    border-radius: 10px;
+                    width: 100%;
+                    height: 50%;
+                    overflow: hidden;
+                    margin: 9px 0px;
+                    border: 1px solid rgb(215, 215, 215);
+                    img{
+                        object-fit: fill;
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
+            }
+            .section2{
+
+                padding: 10px;
+                height: 100%;
+                width: 50%;
+                label{
+                    margin-bottom: 4px;
+                }
+            }
+        }
+
+        .form-text{
+            width: 100%;
+            justify-content: center;
+            padding: 5px 12px 0px 12px;
+            h2{
+                text-align: center;
+                height: 30px;
+                align-items: center;
+            }
+            hr{
+                margin-bottom: px;
+            }
+        }
+
+        .edit-input{
+            width: 100%;
+            label {
+                font-size: 14px;
+            }
+            input, select, textarea, option {
+                width: 100%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+        }
+    }
+
+    
+    .close-btn {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        font-size: 35px;
+        cursor: pointer;
+        color: #0025B7;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        &:hover{
+          color: #0025B7;
+          cursor: pointer;
+          transform: translateY(-2px); /* Slight lift effect */
+        }
+    }
+
+    .submit-group{
+        height: 100px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        align-items: flex-end;
+        button {
+            width: 150px;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #0025B7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            &:hover{
+                background-color: #EFF6FF;
+                border: 1px solid #0025B7;
+                color: #000000;
+                transform: translateY(-2px); /* Slight lift effect */
+                box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 5px;
+            }
+        } 
+    }
+}
+
+
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    border: none;
+    background: none;
+    color: #333;
+}
+
+.close-btn:hover {
+    color: #e74c3c;
+}
+
+/* Cancel Button */
+/* .cancel-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background-color: #c0392b;
+} */
+
+
+.success-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-in-out;
+    .modal-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        width: 400px;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        animation: slideIn 0.3s ease-in-out;
+        .success-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            h2 {
+                margin: 0;
+                font-size: 20px;
+                color: #4CAF50;
+            }
+            button {
+                padding: 5px 10px;
+                background-color: #0025B7;
+                color: #ffffff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background-color 0.3s;
+                &:hover {
+                    background-color: #0045FF;
+                }
+            }
+        }
+    }
+}
+    // @keyframes scaleIn {
+    //     from { transform: translate(50%, 50%) scale(0); }
+    //     to { transform: translate(-50%, -50%) scale(1); }
+    // }
+
+    /* Animation for Modal */
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        0% { transform: translateY(-50px,-50px); }
+        100% { transform: translateY(0); }
+    }
+
+    

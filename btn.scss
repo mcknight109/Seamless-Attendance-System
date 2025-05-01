@@ -1,0 +1,84 @@
+.btn-login{
+  background-color: #0025B7;
+  padding: 15px 25px;
+  border: 1px solid #0025B7;
+  border-radius: 8px;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 15px;
+  width: fit-content;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover{
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 5px;
+    border: 1px solid #ffffff;
+    color: rgb(255, 255, 255);
+  }
+}
+
+.btn-signup{
+  background-color: #00000000;
+  margin-left: 5px;
+  padding: 15px 25px;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 15px;
+  width: fit-content;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover{
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 5px;
+    border: 1px solid #ffffff;
+    color: rgb(255, 255, 255);
+  }
+}
+
+.login-btn{
+  margin-top: 10px;
+  background-color: #0025B7;
+  padding: 10px 20px;
+  border: 1px solid #0025B7;
+  border-radius: 5px;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 15px;
+  width: fit-content;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover{
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 5px;
+    border: 1px solid #0066E3;
+    color: rgb(255, 255, 255);
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #0025B7;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover{
+    color: #0025B7;
+    cursor: pointer;
+    transform: translateY(-2px); /* Slight lift effect */
+  }
+}
+
+
