@@ -25,7 +25,8 @@ body {
         flex-direction: column;
         .sas {
             font-size: 16px;
-            height: 30%;
+            margin-bottom: 70px;
+            font-weight: bold;
         }
         h1 {
             margin: 0px 0px 25px;
@@ -46,13 +47,10 @@ body {
     }
 
     .right {
-        margin-left: 20px;
-        width: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+        height: 100%;
+
         .image {
+            margin-top: 80px;
             overflow: hidden;
             width: 450px;
             height: 300px;
