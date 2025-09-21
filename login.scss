@@ -58,7 +58,7 @@ body {
                 object-fit: cover;
                 width: 100%;
                 height: 100%;
-                border-radius: 20px;
+                border-radius: 15px;
             }
         }
     }
@@ -75,7 +75,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-    display: none;
+    display: flex;
     flex-direction: row;
     width: 600px;
     height: 400px;
@@ -128,7 +128,7 @@ body {
             }
         }
         h2 {
-            margin-bottom: 60px;
+            margin-bottom: 30px;
         }
     }
 }

@@ -1,40 +1,34 @@
 <?php
 session_start();
-include '../db_connection.php'; // Database connection
+include '../db_connection.php';
+date_default_timezone_set('Asia/Manila');
 
-// Check if the user is logged in
+// Check login
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Redirect to login if the user is not logged in
+    header("Location: login.php");
     exit();
 }
 
-// Set timezone to ensure correct time display
-date_default_timezone_set('Asia/Manila');
-
-// Check if there is a session message
-if (isset($_SESSION['message'])) {
-    // Display the message in an alert
-    echo "<script>alert('" . $_SESSION['message'] . "');</script>";
-    // Unset the session message after displaying it
-    unset($_SESSION['message']);
-}
-
-// Get the user_id from the session
 $user_id = $_SESSION['user_id'];
 
-// Fetch the user data from the database
+// Fetch logged-in user info
 $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$result = $stmt->get_result();
+$user = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
-if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
-} else {
-    echo "User not found.";
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'fetch_current_user') {
+    $user_id = $_SESSION['user_id'];
+    $stmt = $conn->prepare("SELECT user_id, fname, lname, email, gender, profile FROM users WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    echo json_encode($result);
+    exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +43,25 @@ if ($result->num_rows === 1) {
     <link rel="stylesheet" href="../users/scss/modal.scss">
     <link rel="stylesheet" href="../users/scss/btn.scss"> 
     <title>Admin Dashboard</title>
+    <style>
+        /* Add small adjustments for modal preview area */
+        .profile-preview {
+            width: 100%;
+            height: 280px;
+            border: 1px dashed #ccc;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            border-radius:8px;
+            background:#fafafa;
+        }
+        .profile-preview img {
+            max-width:100%;
+            max-height:100%;
+            object-fit: fill;
+        }
+    </style>
 </head>
 <body>
     <div class="sidebar">
@@ -72,14 +85,8 @@ if ($result->num_rows === 1) {
                 <span class="icon">
                     <i class="bi bi-people"></i>
                 </span>
-                <span class="description">Time-in</span>
+                <span class="description">Attendance</span>
             </a>
-            <!-- <a class="nav-link" href="attendance_log.php">
-                <span class="icon">
-                    <i class="bi bi-list-check"></i>
-                </span>
-                <span class="description">Attendance Log</span>
-            </a> -->
             <a class="nav-link" href="request_leave.php">
                 <span class="icon">
                     <i class="bi bi-chat-left-text"></i>
@@ -97,141 +104,242 @@ if ($result->num_rows === 1) {
     </div>
 
     <main class="main-content">
-
-        <div class="header">
-            <div class="welcome-message">
-                <span class="icon">
-                <i class="bi bi-person-circle"></i>
-                </span>
-                Welcome, <?php echo htmlspecialchars($user['full_name']); ?>
-            </div>
-        </div>
-
-        <div class="page-title">
-            <h1>USER DASHBOARD</h1>
-        </div>
-        <div class="dashboard-content">
-            <div class="profile-container">
-                <div class="profile-image">
-                    <div class="image">
-                        <img src="../images/profilee.png" alt="Profile Image">
-                    </div>
-                    <!-- Edit Account Btn -->
-                    <div class="edit-btn">
-                        <button class="add-btn" id="">
-                            <i class="bi bi-pencil-square"></i>
-                            Edit
-                        </button>
-                    </div>
+        <div class="content-container">
+            <div class="header">
+                <div class="page-title">
+                    <h1>PROFILE DASHBOARD</h1>
+                    <p id="current-date">Wed, January 20, 2026</p>
+                    <p id="current-time">Time: 01:20 PM</p>
                 </div>
-                <div class="vertical-hr"></div>
-                <div class="info-table">
-                    <table>
-                        <h2>INFOMATION</h2>
-                        <tr>
-                            <th>Name</th>
-                                <td>: <?php echo $user['full_name']; ?></td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                                <td>: <?php echo $user['email']; ?></td>
-                        </tr>
-                        <tr>
-                            <th>Gender</th>
-                                <td>: <?php echo $user['gender']; ?></td>
-                        </tr>
-                        <tr>
-                            <th>Contact</th>
-                                <td>: <?php echo $user['contact_no']; ?></td>
-                        </tr>
-                        <tr>
-                            <th style="text-align: right;">Time In</th>
-                            <td>: <?php echo date('h:i A', strtotime($user['start_time'])); ?></td>
-                        </tr>
-                        <tr>
-                            <th>Time Out</th>
-                            <td>: <?php echo date('h:i A', strtotime($user['end_time'])); ?></td>
-                        </tr>
-                    </table>
-                        <div class="profile-btn">
-                            <div class="shift-btn">
-                                <a href="" style="text-transform: capitalize;"><strong><?php echo $user['shift_type']; ?> shift</strong></a>
-                            </div>
-                            <div class="in-btn">
-                                <a href="time_in.php">Time In</a>
-                            </div>
-                        </div>
+                <div class="welcome-message">
+                    <span class="icon">
+                        <i class="bi bi-person-circle"></i>
+                    </span>
+                    Welcome, Neil Alferez
+                </div>
+            </div>
 
+            <div class="dashboard-content">
+                <div class="profile-container">
+                    <div class="profile-image">
+                        <div class="image">
+                            <img id="dashboardProfileImage" src="../images/profilee.png" alt="Profile Image">
+                        </div>
+                        <!-- Edit Account Btn -->
+                        <div class="edit-btn">
+                            <button class="edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="vertical-hr"></div>
+                        <div class="info-table">
+                            <table>
+                                <h2>INFORMATION</h2>
+                                <tr>
+                                    <th>Name</th>
+                                    <td>: <?php echo htmlspecialchars($user['fname'] . " " . $user['lname']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>: <?php echo htmlspecialchars($user['email']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Gender</th>
+                                    <td>: <?php echo htmlspecialchars($user['gender']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Attendance</th>
+                                    <td>: <?php echo htmlspecialchars($user['attendance']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>: <?php echo htmlspecialchars($user['status']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Account Created</th>
+                                    <td>: <?php echo date("M d, Y h:i A", strtotime($user['created_at'])); ?></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
-            <!-- Edit Account Modal -->
-            <div id="editAccountModal" class="user-edit-modal">
-                <div class="modal-content">
-                    <span class="close-btn" id="closeModalBtn">&times;</span>
-                    <div class="form-text">
-                        <h2>Edit Account</h2>
-                        <hr>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <form id="editProfileForm" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="edit_profile">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProfileModalLabel">Edit Your Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="editAccountForm" method="POST" action="edit_user.php">
-    <input type="hidden" id="user_id" name="user_id" value="<?php echo $user['user_id']; ?>">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <!-- Left column: profile -->
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label class="form-label">Profile Preview</label>
+                                        <div class="profile-preview" id="profilePreview">
+                                            <span class="text-muted">No image selected</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="profile" class="form-label">Upload Profile Picture</label>
+                                        <input class="form-control" type="file" id="profile" name="profile" accept="image/*">
+                                    </div>
+                                    <small class="text-muted">Supported: JPG, PNG, GIF, WEBP</small>
+                                </div>
 
-    <div class="form-group">
-        <div class="edit-input">
-            <label for="full_name">Full Name:</label>
-            <input type="text" id="full_name" name="full_name" value="<?php echo $user['full_name']; ?>" required>
-        </div>
-        <div class="edit-input">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
+                                <!-- Right column: stacked inputs -->
+                                <div class="col-md-7">
+                                    <div class="mb-3">
+                                        <label for="fname" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="fname" name="fname" 
+                                            value="<?php echo htmlspecialchars($user['fname']); ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lname" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lname" name="lname" 
+                                            value="<?php echo htmlspecialchars($user['lname']); ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" 
+                                            value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="text" class="form-control" id="password" name="password" 
+                                            value="" placeholder="Enter new password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <!-- <label class="form-label">Gender</label> -->
+                                        <div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gender" value="Male"
+                                                    <?php echo ($user['gender'] === 'Male') ? 'checked' : ''; ?>>
+                                                <label class="form-check-label" for="genderMale">Male</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gender" value="Female"
+                                                    <?php echo ($user['gender'] === 'Female') ? 'checked' : ''; ?>>
+                                                <label class="form-check-label" for="genderFemale">Female</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gender" value="Other"
+                                                    <?php echo ($user['gender'] === 'Other') ? 'checked' : ''; ?>>
+                                                <label class="form-check-label" for="genderOther">Other</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- row -->
+                        </div> <!-- container-fluid -->
+                    </div>
+                    <!-- Footer with buttons aligned bottom-right -->
+                    <div class="modal-footer d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="edit-input">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter new password">
-        </div>
-        <div class="edit-input">
-            <label for="gender">Gender:</label>
-            <select id="gender" name="gender" required>
-                <option value="Male" <?php echo $user['gender'] == 'Male' ? 'selected' : ''; ?>>Male</option>
-                <option value="Female" <?php echo $user['gender'] == 'Female' ? 'selected' : ''; ?>>Female</option>
-                <option value="Other" <?php echo $user['gender'] == 'Other' ? 'selected' : ''; ?>>Other</option>
-            </select>
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <div class="edit-input">
-            <label for="contact_no">Contact No:</label>
-            <input type="text" id="contact_no" name="contact_no" value="<?php echo $user['contact_no']; ?>" required>
-        </div>
-    </div>
-
-    <div class="submit-group">
-        <div class="submit-btn">
-            <button type="submit">Save Changes</button>
-        </div>
-        <div class="submit-btn">
-            <button type="button" id="cancelEditBtn" class="cancel-btn">Cancel</button>
-        </div>
-    </div>
-</form>
-                </div>
-            <!-- Success Modal -->
-            <div id="successModal" class="success-modal">
-                <div class="modal-content">
-                    <div class="success-container">
-                        <h2>Successfully Edited Your Account</h2>
-                        <button id="closeSuccessModal" class="close-btn">Close</button>
+    <!-- Success Modal -->
+    <div class="modal fade" id="requestSuccessModal" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <i class="bi bi-check-circle-fill" style="font-size:36px;color:green;"></i>
+                    <h5 class="mt-3">Account updated successfully</h5>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="successOkBtn">OK</button>
                     </div>
                 </div>
             </div>
         </div>
-    
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./edit_user.js"></script>
+    <script src="js/date_time.js"></script>
+
+    <script>
+        document.getElementById("editProfileForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch("Controller/EditController.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(resp => {
+                if (resp.success) {
+                    // Close edit modal
+                    let modal = bootstrap.Modal.getInstance(document.getElementById("editProfileModal"));
+                    modal.hide();
+
+                    // Show success modal
+                    new bootstrap.Modal(document.getElementById("requestSuccessModal")).show();
+
+                } else {
+                    alert("Update failed: " + resp.message);
+                }
+            })
+            .catch(err => console.error("Error:", err));
+        });
+    </script>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Fetch logged-in user profile
+    fetch("user_dashboard.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "action=fetch_current_user"
+    })
+    .then(res => res.json())
+    .then(data => {
+        // Dashboard profile
+        const dashboardImg = document.getElementById("dashboardProfileImage");
+        if (data.profile) {
+            dashboardImg.src = "../uploads/profile/" + data.profile;
+        } else {
+            dashboardImg.src = "../images/profilee.png"; // fallback
+        }
+
+        // Modal profile preview
+        const preview = document.getElementById("profilePreview");
+        preview.innerHTML = data.profile
+            ? `<img src="../uploads/profile/${data.profile}" alt="Profile">`
+            : `<span class="text-muted">No image</span>`;
+    });
+
+    // Live preview when uploading new file in modal
+    document.getElementById("profile").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById("profilePreview");
+
+        preview.innerHTML = ""; 
+        if (file) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.onload = () => URL.revokeObjectURL(img.src);
+            preview.appendChild(img);
+        } else {
+            preview.innerHTML = `<span class="text-muted">No image</span>`;
+        }
+    });
+});
+</script>
+
+
 </body>
 </html>

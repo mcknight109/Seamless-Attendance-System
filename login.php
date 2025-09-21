@@ -71,7 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="description">Manage your attendance seamlessly with our innovative system designed for efficiency and ease of use.</p>
         <div class="login-option">
             <button class="btn-login">Login</button>
-            <!-- <button class="btn-signup">Signin</button> -->
         </div>
         </div>
         <div class="right">
@@ -91,41 +90,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if ($error): ?>
                 <div class="alert alert-danger" style="color: red; margin-bottom: 10px;"><?= $error ?></div>
             <?php endif; ?>
-            <form action="login.php" method="POST" id="loginForm">
-                <div class="input">
-                    <label for="email">Email:</label>
-                    <div class="input-icon">
-                        <i class="bi bi-envelope"></i>
-                        <input 
-                            type="text" 
-                            id="email" 
-                            name="email" 
-                            placeholder="Email" 
-                            maxlength="50" 
-                            title="Email can only contain letters, numbers, and @._-" 
-                            required>
-                    </div>
+        <form action="login.php" method="POST" id="loginForm">
+            <div class="input">
+                <label for="email">Email:</label>
+                <div class="input-icon">
+                    <i class="bi bi-envelope"></i>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Email" 
+                        maxlength="50" 
+                        title="Email can only contain letters, numbers, and @._-" 
+                        required>
                 </div>
-                <div class="input">
-                    <label for="password">Password:</label>
-                    <div class="input-icon">
-                        <i class="bi bi-lock"></i>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            placeholder="Password" 
-                            maxlength="8" 
-                            title="Password can only contain letters, numbers, and @" 
-                            required>
-                    </div>
+            </div>
+            <div class="input">
+                <label for="password">Password:</label>
+                <div class="input-icon">
+                    <i class="bi bi-lock"></i>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Password" 
+                        maxlength="8" 
+                        title="Password can only contain letters, numbers, and @" 
+                        required>
                 </div>
-                <div class="input">
-                    <button type="submit" class="login-btn adjust">Login</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="input">
+                <button type="submit" class="login-btn adjust">Login</button>
+            </div>
     </div>
+</div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const loginBtn = document.querySelector(".btn-login");
+    const modal = document.querySelector(".login_container");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const container = document.querySelector(".container");
+
+    // Show modal
+    loginBtn.addEventListener("click", function () {
+        modal.style.display = "flex";
+        container.style.filter = "blur(5px)";
+    });
+
+    // Close modal when clicking the X button
+    closeModalBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+        container.style.filter = "none";
+    });
+
+    // Close modal when clicking outside the login-form (but not the form itself)
+    window.addEventListener("click", function (e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+            container.style.filter = "none";
+        }
+    });
+
+    // If PHP sends an error, keep modal open automatically
+    <?php if ($error): ?>
+        modal.style.display = "flex";
+        container.style.filter = "blur(5px)";
+    <?php endif; ?>
+});
+</script>
+
+
     <script>
     // Prevent special characters except "@" in email
         const emailInput = document.getElementById('email');
@@ -142,10 +177,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
     </script>
-
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./login/modal.js" defer></script>
-    <script src="./login/login.js" defer></script>
 </body>
 </html>

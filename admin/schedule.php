@@ -1,79 +1,14 @@
 <?php
 session_start();
-include '../db_connection.php'; // Database connection
-
-// Fetch admin's ID from the session
-$admin_id = $_SESSION['user_id'];
-
-// Check if user is logged in and if the role is admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
-    exit();
-}
+include '../db_connection.php';
 
 // Set timezone to ensure correct time display
 date_default_timezone_set('Asia/Manila');
 
-// Fetch admin's full name from the database
-$query = "SELECT full_name FROM users WHERE user_id = '$admin_id'";
-$result = $conn->query($query);
-$admin = $result->fetch_assoc();
-$admin_name = $admin['full_name']; // Admin's full name
-
-$query = "SELECT schedule_requests.request_id, users.full_name, schedule_requests.shift_type, schedule_requests.start_time, schedule_requests.end_time, schedule_requests.status
-          FROM schedule_requests
-          JOIN users ON schedule_requests.user_id = users.user_id
-          WHERE schedule_requests.status = 'pending'";
-
-$result = $conn->query($query);
-$requests = $result->fetch_all(MYSQLI_ASSOC);
-
-// Handle approval/rejection of requests
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['approve_request_id'])) {
-        $request_id = $_POST['approve_request_id'];
-        $status = 'approved';
-
-        // Fetch request details
-        $stmt = $conn->prepare("SELECT user_id, shift_type, start_time, end_time FROM schedule_requests WHERE request_id = ?");
-        $stmt->bind_param("i", $request_id);
-        $stmt->execute();
-        $request = $stmt->get_result()->fetch_assoc();
-
-        // Store original schedule in users table
-        $user_id = $request['user_id'];
-        $stmt = $conn->prepare(
-            "UPDATE users 
-             SET original_shift_type = shift_type, 
-                 original_start_time = start_time, 
-                 original_end_time = end_time, 
-                 shift_type = ?, 
-                 start_time = ?, 
-                 end_time = ? 
-             WHERE user_id = ?"
-        );
-        $stmt->bind_param(
-            "sssi",
-            $request['shift_type'],
-            $request['start_time'],
-            $request['end_time'],
-            $user_id
-        );
-        $stmt->execute();
-
-        // Update schedule request status to approved
-        $stmt = $conn->prepare("UPDATE schedule_requests SET status = ? WHERE request_id = ?");
-        $stmt->bind_param("si", $status, $request_id);
-        $stmt->execute();
-    } elseif (isset($_POST['reject_request_id'])) {
-        $request_id = $_POST['reject_request_id'];
-        $status = 'rejected';
-
-        // Update schedule request status to rejected
-        $stmt = $conn->prepare("UPDATE schedule_requests SET status = ? WHERE request_id = ?");
-        $stmt->bind_param("si", $status, $request_id);
-        $stmt->execute();
-    }
+// Check if user is logged in and admin
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+    header("Location: login.php");
+    exit();
 }
 ?>
 
@@ -87,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../admin/scss/admin.scss">
     <link rel="stylesheet" href="../admin/scss/table.scss">    
     <link rel="stylesheet" href="../admin/scss/btn.scss"> 
+    <link rel="stylesheet" href="../admin/scss/dashboard.scss"> 
     <title>Leave Requests</title>
 </head>
 <body>
@@ -142,47 +78,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </nav>
     </div>
     <main class="main-content">
-
-        <div class="header">
-            <div class="welcome-message">
-                <span class="icon">
-                    <i class="bi bi-person-circle"></i>
-                </span>
-                <!-- Display the admin's full name -->
-                Welcome, <?php echo htmlspecialchars($admin_name); ?>
-            </div>
-        </div>
-
-        <div class="page-title">
-            <h1>ADD SCHEDULE</h1>
-        </div>
-
-        <div class="dashboard-content">
-            <div class="schedule-container">
-                <div class="sched-form">
-                    <form action="add_schedule.php" method="POST">
-                        <h2>ADD NEW SCHEDULE</h2>
-                        <div class="mb-3">
-                            <label for="shift_type" class="form-label">Type of Shift</label>
-                            <select id="shift_type" name="shift_type" class="form-select" required>
-                                <option value="morning">Morning Shift</option>
-                                <option value="afternoon">Afternoon Shift</option>
-                                <option value="night">Night Shift</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="start_time" class="form-label">Shift Start Time</label>
-                            <input type="time" id="start_time" name="start_time" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="end_time" class="form-label">Shift End Time</label>
-                            <input type="time" id="end_time" name="end_time" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Schedule</button>
-                    </form>
+        <div class="content-container">
+            <div class="header">
+                <div class="page-title">
+                    <h1>SCHEDULE MANAGEMENT</h1>
+                    <p id="current-date">Wed, January 20, 2026</p>
+                    <p id="current-time">Time: 01:20 PM</p>
                 </div>
-                <div class="schedule-request">
-                    <h2>Schedule Change Requests</h2>
+                <div class="welcome-message">
+                    <span class="icon">
+                        <i class="bi bi-person-circle"></i>
+                    </span>
+                    <!-- Display the admin's full name -->
+                    Welcome, Admin Neil
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="table-top">
+                    <!-- <div class="top1">
+                    </div> -->
+                    <div class="top2">
+                        <div class="search-container">
+                            <form method="get" class="search-form d-flex">
+                                <input type="text" name="search" class="form-control" placeholder="Search user or email" value="">
+                                <button type="submit" class="btn btn-primary ms-2">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </form>
+                        </div>
+                        <div class="table-btn">
+                            <form method="get">
+                                <button type="submit" name="filter" value="approved" class="btn btn-primary">
+                                    Requests
+                                </button>
+                                 <button type="submit" name="filter" value="approved" class="btn btn-primary">
+                                    Add Schedule
+                                </button>
+                            </form>
+                        </div>
+                    </div>     
+                </div>
+
+                <div class="manage-container">
                     <table class="table">
                         <thead>
                             <tr>
@@ -195,32 +133,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($requests as $request): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($request['full_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($request['shift_type']); ?></td>
-                                    <td><?php echo htmlspecialchars($request['start_time']); ?></td>
-                                    <td><?php echo htmlspecialchars($request['end_time']); ?></td>
-                                    <td><?php echo htmlspecialchars($request['status']); ?></td>
-                                    <td>
-                                        <?php if ($request['status'] == 'pending'): ?>
-                                            <form method="POST">
-                                                <button type="submit" name="approve_request_id" value="<?php echo $request['request_id']; ?>" class="btn btn-success">Approve</button>
-                                                <button type="submit" name="reject_request_id" value="<?php echo $request['request_id']; ?>" class="btn btn-danger">Reject</button>
-                                            </form>
-                                        <?php else: ?>
-                                            <span class="badge bg-secondary"><?php echo htmlspecialchars($request['status']); ?></span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
+                            <tr>
+                                <td>Admin Neil</td>
+                                <td>Admin Neil</td>
+                                <td>Admin Neil</td>
+                                <td>Admin Neil</td>
+                                <td>Admin Neil</td>
+                                <td class="btn-actions">
+                                    <form method="POST">
+                                        <button class='btn btn-sm btn-outline-secondary edit-action' type="submit" name="" value="">
+                                            <i class='bi bi-pencil-square'></i>
+                                        </button>
+                                        <button class='btn btn-sm btn-outline-danger delete-action' type="submit" name="" value="">
+                                            <i class='bi bi-trash'></i>
+                                        </button>
+                                    </form>
+                                    <span class="badge bg-secondary"></span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination-container">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href=""><-</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="">1</a>
+                            </li>
+                        
+                            <li class="page-item">
+                                <a class="page-link" href="">-></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-       </div>
-    </main>
+        </div>
+    </main>                
+    <div class="sched-form" style="display: none;">
+        <form action="add_schedule.php" method="POST">
+            <div class="mb-3">
+                <label for="shift_type" class="form-label">Type of Shift</label>
+                <select id="shift_type" name="shift_type" class="form-select" required>
+                    <option value="morning">Morning Shift</option>
+                    <option value="afternoon">Afternoon Shift</option>
+                    <option value="night">Night Shift</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="start_time" class="form-label">Shift Start Time</label>
+                <input type="time" id="start_time" name="start_time" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="end_time" class="form-label">Shift End Time</label>
+                <input type="time" id="end_time" name="end_time" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Schedule</button>
+        </form>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="requests.js" defer></script>
+    <script src="js/date_time.js"></script>
 </body>
 </html>

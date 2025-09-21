@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "sameless_system";
+$dbname = "seamless_db";
 
 // Create a new database connection
 $conn = new mysqli($servername, $username, $password, $dbname);
