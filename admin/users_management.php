@@ -286,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </a>
             <hr>
             <span class="category">Management</span>
-            <a class="nav-link" href="users_management.php">
+            <a class="nav-link active" href="users_management.php">
                 <span class="icon">
                     <i class="bi bi-people"></i>
                 </span>
@@ -574,32 +574,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     <!-- Success Modal -->
     <div class="modal fade" id="createSuccessModal" tabindex="-1" aria-labelledby="createSuccessModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body text-center py-4">
-            <i class="bi bi-check-circle-fill" style="font-size:36px;color:green;"></i>
-            <h5 class="mt-3">User created successfully</h5>
-            <div class="mt-3">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="successOkBtn">OK</button>
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <i class="bi bi-check-circle-fill" style="font-size:36px;color:green;"></i>
+                    <h5 class="mt-3">User created successfully</h5>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="successOkBtn">OK</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editSuccessModal" tabindex="-1" aria-labelledby="editSuccessModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body text-center py-4">
-            <i class="bi bi-check-circle-fill" style="font-size:36px;color:green;"></i>
-            <h5 class="mt-3">Account edited successfully</h5>
-            <div class="mt-3">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="successOkBtn">OK</button>
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <i class="bi bi-check-circle-fill" style="font-size:36px;color:green;"></i>
+                    <h5 class="mt-3">Account edited successfully</h5>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="successOkBtn">OK</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
@@ -622,23 +622,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     <!-- Error Modal (optional) -->
     <div class="modal fade" id="createErrorModal" tabindex="-1" aria-labelledby="createErrorModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body text-center py-4">
-            <i class="bi bi-x-circle-fill" style="font-size:36px;color:#d9534f;"></i>
-            <h6 class="mt-3 text-danger">There was an issue</h6>
-            <p id="createErrorMessage" class="small text-muted px-3"></p>
-            <div class="mt-2">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <i class="bi bi-x-circle-fill" style="font-size:36px;color:#d9534f;"></i>
+                    <h6 class="mt-3 text-danger">There was an issue</h6>
+                    <p id="createErrorMessage" class="small text-muted px-3"></p>
+                    <div class="mt-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/date_time.js"></script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const editModal = new bootstrap.Modal(document.getElementById("editUserModal"));

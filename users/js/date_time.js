@@ -15,4 +15,4 @@ function updateDateTime() {
     timeEl.textContent = 'Time: ' + hours + ':' + minutes + ' ' + ampm;
 }
 updateDateTime();
-setInterval(updateDateTime, 1000 * 30); // update every 30 seconds
+setInterval(updateDateTime, 1000 * 1); // update every 30 seconds

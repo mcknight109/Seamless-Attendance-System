@@ -149,16 +149,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                     <td>: <?php echo htmlspecialchars($user['gender']); ?></td>
                                 </tr>
                                 <tr>
-                                    <th>Attendance</th>
-                                    <td>: <?php echo htmlspecialchars($user['attendance']); ?></td>
-                                </tr>
-                                <tr>
                                     <th>Status</th>
                                     <td>: <?php echo htmlspecialchars($user['status']); ?></td>
                                 </tr>
                                 <tr>
                                     <th>Account Created</th>
-                                    <td>: <?php echo date("M d, Y h:i A", strtotime($user['created_at'])); ?></td>
+                                    <td>: <?php echo date("M d, Y", strtotime($user['created_at'])); ?></td>
                                 </tr>
                             </table>
                         </div>
@@ -209,16 +205,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                             value="<?php echo htmlspecialchars($user['lname']); ?>" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" 
-                                            value="<?php echo htmlspecialchars($user['email']); ?>" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input type="text" class="form-control" id="password" name="password" 
-                                            value="" placeholder="Enter new password">
-                                    </div>
-                                    <div class="mb-3">
                                         <!-- <label class="form-label">Gender</label> -->
                                         <div>
                                             <div class="form-check form-check-inline">
@@ -238,6 +224,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" 
+                                            value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="text" class="form-control" id="password" name="password" 
+                                            value="" placeholder="Enter new password">
+                                    </div>                      
                                 </div>
                             </div> <!-- row -->
                         </div> <!-- container-fluid -->

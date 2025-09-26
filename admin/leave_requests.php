@@ -100,7 +100,7 @@ try {
                 </span>
                 <span class="description">Attendance</span>
             </a>
-            <a class="nav-link" href="leave_requests.php">
+            <a class="nav-link active" href="leave_requests.php">
                 <span class="icon">
                     <i class="bi bi-chat-left-text"></i>
                 </span>

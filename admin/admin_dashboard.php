@@ -34,7 +34,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
                 <span class="description">S.A.S</span>
             </a>
             <span class="category">Admin</span>
-            <a class="nav-link" href="admin_dashboard.php">
+            <a class="nav-link active" href="admin_dashboard.php">
                 <span class="icon">
                     <i class="bi bi-bounding-box"></i>
                 </span>
