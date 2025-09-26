@@ -1,4 +1,7 @@
-ALA WA BALO
-#0066E3
-#0025B7
+# My Seamless Attendance System
 
+### Login Page
+![Index Page](images/index.png)
+
+### Dashboard
+![Login Page](images/loginn.png)
