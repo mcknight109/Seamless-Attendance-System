@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Manila');
 
 // Check if user is logged in and admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -212,17 +212,16 @@ $total_pages = ceil($total_records / $limit);
                 <div class="pagination-container">
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
-                            <?php if ($page > 1): ?>
-                                <li class="page-item"><a class="page-link" href="?page=<?php echo $page-1; ?>&search=<?php echo urlencode($search); ?>&filter_date=<?php echo urlencode($selected_date); ?>">Prev</a></li>
-                            <?php endif; ?>
-                            <?php for ($i=1; $i<=$total_pages; $i++): ?>
-                                <li class="page-item <?php if ($i==$page) echo 'active'; ?>">
-                                    <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>&filter_date=<?php echo urlencode($selected_date); ?>"><?php echo $i; ?></a>
-                                </li>
-                            <?php endfor; ?>
-                            <?php if ($page < $total_pages): ?>
-                                <li class="page-item"><a class="page-link" href="?page=<?php echo $page+1; ?>&search=<?php echo urlencode($search); ?>&filter_date=<?php echo urlencode($selected_date); ?>">Next</a></li>
-                            <?php endif; ?>
+                            <li class="page-item">
+                                <a class="page-link" href=""><-</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="">1</a>
+                            </li>
+                        
+                            <li class="page-item">
+                                <a class="page-link" href="">-></a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

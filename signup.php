@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sssss", $full_name, $email, $hashed_password, $gender, $contact_no);
         if ($stmt->execute()) {
             // Success - redirect to login page or dashboard
-            header("Location: login.php");
+            header("Location: index.php");
             exit();
         } else {
             // Error while inserting

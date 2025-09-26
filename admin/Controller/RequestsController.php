@@ -8,7 +8,7 @@ date_default_timezone_set('Asia/Manila');
 
 // require admin
 if (!isset($_SESSION['user_id']) || (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin')) {
-    header("Location: ../login.php");
+    header("Location: ../../index.php");
     exit();
 }
 

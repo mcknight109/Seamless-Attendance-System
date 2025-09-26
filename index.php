@@ -58,24 +58,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="login.scss">
+    <link rel="stylesheet" href="index.scss">
     <link rel="stylesheet" href="btn.scss">
     <title>Login</title>
 </head>
 <body>
     <div class="container">
-        <div class="left">
-            <div class="sas">S.A.S</div>
-            <h1>Seamless</h1>
-            <h2>Attendance System</h2>
-            <p class="description">Manage your attendance seamlessly with our innovative system designed for efficiency and ease of use.</p>
-        <div class="login-option">
-            <button class="btn-login">Login</button>
-        </div>
-        </div>
-        <div class="right">
-            <div class="image">
-                <img src="./images/login.jpg" alt="Attendance System Image">
+        <div class="content-container">
+            <div class="left">
+                <div class="sas">S.A.S</div>
+                <h1>Seamless</h1>
+                <h2>Attendance System</h2>
+                <p class="description">Manage your attendance seamlessly with our innovative system designed for efficiency and ease of use.</p>
+            <div class="login-option">
+                <button class="btn-login">Login</button>
+            </div>
+            </div>
+            <div class="right">
+                <div class="image">
+                    <img src="./images/login.jpg" alt="Attendance System Image">
+                </div>
             </div>
         </div>
     </div>
@@ -90,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if ($error): ?>
                 <div class="alert alert-danger" style="color: red; margin-bottom: 10px;"><?= $error ?></div>
             <?php endif; ?>
-        <form action="login.php" method="POST" id="loginForm">
+        <form action="index.php" method="POST" id="loginForm">
             <div class="input">
                 <label for="email">Email:</label>
                 <div class="input-icon">
@@ -99,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         type="text" 
                         id="email" 
                         name="email" 
-                        placeholder="Email" 
+                        placeholder="Enter your email" 
                         maxlength="50" 
                         title="Email can only contain letters, numbers, and @._-" 
                         required>
@@ -113,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         type="password" 
                         id="password" 
                         name="password" 
-                        placeholder="Password" 
+                        placeholder="Enter you password" 
                         maxlength="8" 
                         title="Password can only contain letters, numbers, and @" 
                         required>
@@ -122,61 +124,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="input">
                 <button type="submit" class="login-btn adjust">Login</button>
             </div>
+        </div>
     </div>
-</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginBtn = document.querySelector(".btn-login");
+        const modal = document.querySelector(".login_container");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const container = document.querySelector(".container");
 
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const loginBtn = document.querySelector(".btn-login");
-    const modal = document.querySelector(".login_container");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const container = document.querySelector(".container");
+        // Show modal
+        loginBtn.addEventListener("click", function () {
+            modal.style.display = "flex";
+            container.style.filter = "blur(5px)";
+        });
 
-    // Show modal
-    loginBtn.addEventListener("click", function () {
-        modal.style.display = "flex";
-        container.style.filter = "blur(5px)";
-    });
-
-    // Close modal when clicking the X button
-    closeModalBtn.addEventListener("click", function () {
-        modal.style.display = "none";
-        container.style.filter = "none";
-    });
-
-    // Close modal when clicking outside the login-form (but not the form itself)
-    window.addEventListener("click", function (e) {
-        if (e.target === modal) {
+        // Close modal when clicking the X button
+        closeModalBtn.addEventListener("click", function () {
             modal.style.display = "none";
             container.style.filter = "none";
-        }
-    });
-
-    // If PHP sends an error, keep modal open automatically
-    <?php if ($error): ?>
-        modal.style.display = "flex";
-        container.style.filter = "blur(5px)";
-    <?php endif; ?>
-});
-</script>
-
-
-    <script>
-    // Prevent special characters except "@" in email
-        const emailInput = document.getElementById('email');
-        emailInput.addEventListener('input', function () {
-            this.value = this.value.replace(/[^a-zA-Z0-9@._-]/g, ''); // Allows letters, numbers, @, ., _, and -
         });
 
-        // Restrict password input to letters, numbers, and "@" with max length of 8
-        const passwordInput = document.getElementById('password');
-        passwordInput.addEventListener('input', function () {
-            this.value = this.value.replace(/[^a-zA-Z0-9@]/g, ''); // Allows letters, numbers, and @
-            if (this.value.length > 8) {
-                this.value = this.value.slice(0, 8); // Restricts to 8 characters
+        // Close modal when clicking outside the login-form (but not the form itself)
+        window.addEventListener("click", function (e) {
+            if (e.target === modal) {
+                modal.style.display = "none";
+                container.style.filter = "none";
             }
         });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        // If PHP sends an error, keep modal open automatically
+        <?php if ($error): ?>
+            modal.style.display = "flex";
+            container.style.filter = "blur(5px)";
+        <?php endif; ?>
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="index.js"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Manila');
 
 // Check if user is logged in and admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -158,7 +158,7 @@ try {
                 </div>
 
                 <div class="manage-container">
-                    <table class="table table-hover">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Full Name</th>
@@ -202,6 +202,22 @@ try {
                         <?php endif; ?>
                         </tbody>
                     </table>
+                </div>
+                <div class="pagination-container">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href=""><-</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="">1</a>
+                            </li>
+                        
+                            <li class="page-item">
+                                <a class="page-link" href="">-></a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

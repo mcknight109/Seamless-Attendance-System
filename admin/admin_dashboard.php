@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Manila');
 
 // Check if user is logged in and admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -121,7 +121,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
                 <div class="pie-chart-container">
                     <h2>User Status Today</h2>
                     <hr>
-                    <canvas id="userStatusPieChart"></canvas>
+                    <div class="pie-content">
+                        <canvas id="userStatusPieChart"></canvas>
+                    </div>
                 </div>
                 <div class="recent-container">
                     <h2>Recently Logged-in Users</h2>

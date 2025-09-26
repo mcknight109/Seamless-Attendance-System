@@ -7,7 +7,7 @@
 
     // Check if user is logged in and admin
     if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-        header("Location: login.php");
+        header("Location: ../index.php");
         exit();
     }
 
@@ -149,47 +149,64 @@
 
             <!-- Schedules table (hidden by default) -->
             <div id="schedulesTableWrapper" style="display:none;">
-                <table class="table table-striped">
-                <thead>
-                    <tr>
-                    <th>Schedule</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Action</th>
-                    </tr>
-                </thead>
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>Schedule</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
                 <tbody>
                     <?php if (count($schedules)): ?>
-                    <?php foreach ($schedules as $s): ?>
-                        <tr>
-                        <td><?php echo htmlspecialchars($s['shift_name']); ?></td>
-                        <td><?php echo date("h:i A", strtotime($s['start_time'])); ?></td>
-                        <td><?php echo date("h:i A", strtotime($s['end_time'])); ?></td>
-                        <td class="btn-actions">
-                            <button class="btn btn-sm btn-outline-secondary edit-schedule-btn btn1-action"
-                                    data-schedule-id="<?php echo $s['schedule_id']; ?>"
-                                    data-shift-name="<?php echo htmlspecialchars($s['shift_name']); ?>"
-                                    data-start-time="<?php echo $s['start_time']; ?>"
-                                    data-end-time="<?php echo $s['end_time']; ?>"
-                                    type="button">
-                            <i class="bi bi-pencil-square"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger delete-schedule-btn btn2-action"
-                                    data-schedule-id="<?php echo $s['schedule_id']; ?>"
-                                    data-shift-name="<?php echo htmlspecialchars($s['shift_name']); ?>"
-                                    type="button">
-                            <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php else: ?>
+                        <?php foreach ($schedules as $s): ?>
+                            <tr>
+                            <td><?php echo htmlspecialchars($s['shift_name']); ?></td>
+                            <td><?php echo date("h:i A", strtotime($s['start_time'])); ?></td>
+                            <td><?php echo date("h:i A", strtotime($s['end_time'])); ?></td>
+                            <td class="btn-actions">
+                                <button class="btn btn-sm btn-outline-secondary edit-schedule-btn btn1-action"
+                                        data-schedule-id="<?php echo $s['schedule_id']; ?>"
+                                        data-shift-name="<?php echo htmlspecialchars($s['shift_name']); ?>"
+                                        data-start-time="<?php echo $s['start_time']; ?>"
+                                        data-end-time="<?php echo $s['end_time']; ?>"
+                                        type="button">
+                                <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-schedule-btn btn2-action"
+                                        data-schedule-id="<?php echo $s['schedule_id']; ?>"
+                                        data-shift-name="<?php echo htmlspecialchars($s['shift_name']); ?>"
+                                        type="button">
+                                <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
                     <tr><td colspan="4" class="text-center">No schedules found.</td></tr>
                     <?php endif; ?>
                 </tbody>
                 </table>
             </div>
+            
             </div> <!-- manage-container -->
+            <div class="pagination-container">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href=""><-</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="">1</a>
+                        </li>
+                    
+                        <li class="page-item">
+                            <a class="page-link" href="">-></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div> <!-- dashboard-content -->
         </div> <!-- content-container -->
     </main>
